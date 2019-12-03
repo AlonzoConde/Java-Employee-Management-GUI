@@ -1,0 +1,376 @@
+import java.awt.*;
+	import java.awt.event.*;
+	import java.sql.*;
+	import javax.swing.*;
+	import javax.swing.table.DefaultTableModel;
+	
+
+	public class Main {	
+		 
+			private String[] columnNames = {"EID", "First Name", "Last Name", "Email", "Phone Number", "Age", "Sex", "Salary"};
+			private Object[][] data={{"","","","","","",""}};
+			private JTable table;
+			private DefaultTableModel dm;
+			private JScrollPane scroll; 
+			
+			private JButton button1, button2, button3, button4;
+			private JLabel label1, label2, label3, label4, label5, label6, label7, label8;
+			private JTextField tf1, tf2,tf3, tf4, tf5, tf6, tf7, tf8;
+			
+			Inventory iv = new Inventory();
+			
+			public Main() throws SQLException {
+				
+				final int WINDOW_WIDTH = 1000, WINDOW_HEIGHT = 700;
+				
+				JFrame window = new JFrame("Employee Management Program");
+				window.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+				window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+					
+				Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+				int x = (int) ((dimension.getWidth() - window.getWidth()) / 2);
+				int y = (int) ((dimension.getWidth() - window.getWidth()) / 2);
+				window.setLocation(x, y);
+				window.setLayout(null);
+			
+				table = new JTable();
+				dm = new DefaultTableModel(iv.table0(), columnNames);
+				//dm = new DefaultTableModel(data, columnNames);
+				table.setModel(dm);
+				scroll = new JScrollPane(table);
+				scroll.setSize(900, 270);
+				scroll.setLocation(50, 50);
+				window.add(scroll);
+					
+				button1 = new JButton("Search");
+				button1.setSize(100, 30);
+				button1.setLocation(100, 350);
+				button1.addActionListener( new Button1Clicked());
+				window.add(button1);
+				button2 = new JButton("Delete");
+				button2.setSize(100, 30);
+				button2.setLocation(300, 350);
+				button2.addActionListener( new Button2Clicked());
+				window.add(button2);
+				button3 = new JButton("Update");
+				button3.setSize(100, 30);
+				button3.setLocation(500, 350);
+				button3.addActionListener( new Button3Clicked());
+				window.add(button3);
+				button4 = new JButton("Add");
+				button4.setSize(100, 30);
+				button4.setLocation(700, 350);
+				button4.addActionListener( new Button4Clicked());
+				window.add(button4);
+				
+				
+				label1 = new JLabel("EID");
+				label1.setSize(190, 30);
+				label1.setLocation(100, 425);
+				window.add(label1);
+				tf1 = new JTextField(10);
+				tf1.setSize(100, 30);
+				tf1.setLocation(190, 425);
+				window.add(tf1);
+				
+				label2 = new JLabel("First Name");
+				label2.setSize(190, 30);
+				label2.setLocation(100, 475);
+				window.add(label2);
+				tf2 = new JTextField(10);
+				tf2.setSize(100, 30);
+				tf2.setLocation(190, 475);
+				window.add(tf2);
+				
+				label3 = new JLabel("Last Name");
+				label3.setSize(190, 30);
+				label3.setLocation(350, 475);
+				window.add(label3);
+				tf3 = new JTextField(10);
+				tf3.setSize(100, 30);
+				tf3.setLocation(420, 475);
+				window.add(tf3);
+				
+				label4 = new JLabel("Email");
+				label4.setSize(190, 30);
+				label4.setLocation(600, 475);
+				window.add(label4);
+				tf4 = new JTextField(10);
+				tf4.setSize(100, 30);
+				tf4.setLocation(670, 475);
+				window.add(tf4);
+				
+				label5 = new JLabel("Phone Number");
+				label5.setSize(190, 30);
+				label5.setLocation(100, 525);
+				window.add(label5);
+				tf5 = new JTextField(10);
+				tf5.setSize(100, 30);
+				tf5.setLocation(190, 525);
+				window.add(tf5);
+				
+				label6 = new JLabel("Age");
+				label6.setSize(190, 30);
+				label6.setLocation(350, 525);
+				window.add(label6);
+				tf6 = new JTextField(10);
+				tf6.setSize(100, 30);
+				tf6.setLocation(420, 525);
+				window.add(tf6);
+				
+				label7 = new JLabel("Sex");
+				label7.setSize(190, 30);
+				label7.setLocation(600, 525);
+				window.add(label7);
+				tf7 = new JTextField(10);
+				tf7.setSize(100, 30);
+				tf7.setLocation(670, 525);
+				window.add(tf7);	
+				
+				label8 = new JLabel("Salary");
+				label8.setSize(190, 30);
+				label8.setLocation(100, 575);
+				window.add(label8);
+				tf8 = new JTextField(10);
+				tf8.setSize(100, 30);
+				tf8.setLocation(190, 575);
+				window.add(tf8);	
+				
+				window.setVisible(true);
+		}
+			
+			private class Button1Clicked implements ActionListener
+			{
+				public void  actionPerformed(ActionEvent e)
+				{
+					try {
+						iv.search(tf1.getText(),  tf2.getText(), tf3.getText(), tf4.getText(), tf5.getText(), tf6.getText(), tf7.getText(), tf8.getText());
+						dm.setDataVector(iv.table0(), columnNames);
+						dm.fireTableDataChanged();
+						}catch (SQLException e1) {
+							e1.printStackTrace();
+					}
+			}
+			}
+			private class Button2Clicked implements ActionListener
+			{
+				public void  actionPerformed(ActionEvent e)
+				{
+					try {
+					iv.delete(tf1.getText());
+					dm.setDataVector(iv.table0(), columnNames);
+					dm.fireTableDataChanged();
+				} catch(SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+			private class Button3Clicked implements ActionListener
+			{
+				public void  actionPerformed(ActionEvent e)
+				{
+					try {
+						iv.update(tf1.getText(), tf2.getText(), tf3.getText(), tf4.getText(), tf5.getText(), tf6.getText(), tf7.getText(), tf8.getText());
+						dm.setDataVector(iv.table0(), columnNames);
+						dm.fireTableDataChanged();
+					}catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+			private class Button4Clicked implements ActionListener
+			{
+				public void actionPerformed(ActionEvent e) {
+					try {
+							iv.add(tf1.getText(), tf2.getText(), tf3.getText(), tf4.getText(), tf5.getText(), tf6.getText(), tf7.getText(), tf8.getText());	
+							dm.setDataVector(iv.table0(), columnNames);
+							dm.fireTableDataChanged();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		public static void main(String[] args) throws SQLException { 
+		 	new Main();	 	
+		}
+	}
+	class Inventory {
+		public void update(String id, String fn, String ln, String e, String pn, String a, String s, String sal) throws SQLException {		
+			String addr = "jdbc:mysql://-ip-/employeeManagement0?useSSL=false";
+			Connection con = DriverManager.getConnection(addr,"root","-password-");
+			Statement st = con.createStatement();
+			
+			String sql = ";";
+			
+			if(id.contentEquals("")) {
+				JOptionPane.showMessageDialog(null,
+						 "Please fill in EID field",
+						 "Update Error",
+						 JOptionPane.ERROR_MESSAGE); 
+			}
+				if(fn.equals("") == false) {
+					sql = "update employeeData1 set firstName = '"+fn+"' where EID = '"+id+"';";
+					System.out.println(sql);
+				}
+				else if(ln.equals("") == false) {
+					sql = "update employeeData1 set lastName = '"+ln+"' where EID = '"+id+"';";
+					System.out.println(sql);
+				}
+				else if(e.equals("") == false) {
+					sql = "update employeeData1 set email = '"+e+"' where EID = '"+id+"';";
+					System.out.println(sql);
+				}
+				 else if(pn.equals("") == false) {
+					sql = "update employeeData1 set phoneNumber = '"+pn+"' where EID = '"+id+"';";
+					System.out.println(sql);
+				}
+				 else if(s.equals("") == false) {
+					sql = "update employeeData1 set sex = '"+s+"' where EID = '"+id+"';";
+					System.out.println(sql);
+				}
+				 else if(a.equals("") == false) {
+					sql = "update employeeData1 set age = '"+a+"' where EID = '"+id+"';";
+					System.out.println(sql);
+	
+
+				}
+				 else if(sal.equals("") == false) {
+					sql = "update employeeData1 set salary = '"+sal+"' where EID = '"+id+"';";
+					System.out.println(sql);
+				}
+				
+				st.executeUpdate(sql);
+				con.close();
+		}	
+		
+		public Object[][] search(String id, String fn, String ln, String e, String pn, String a, String s, String sal) throws SQLException {	
+			String addr = "jdbc:mysql://-ip-/employeeManagement0?useSSL=false";
+			Connection con = DriverManager.getConnection(addr,"root","-password-");
+			Statement st = con.createStatement();
+			
+			String sql = ";";
+			
+			if (id.equals("") && fn.equals("") && ln.equals("") &&e.equals("") && pn.equals("") && a.equals("") && s.equals("") && sal.equals(""))
+				 sql = "select * from employeeData1;";	
+			else if(id.equals("") == false) {
+				sql = "SELECT * from employeeData1 where EID = '"+id+"';";
+				System.out.println(sql);
+			}
+			else if(fn.equals("") == false) {
+				sql = "SELECT * FROM employeeData1 WHERE firstName = '"+fn+"';";
+				System.out.println(sql);
+			}
+			else if(ln.equals("") == false) {
+				sql = "SELECT * FROM employeeData1 WHERE lastName = '"+ln+"';";
+				System.out.println(sql);
+			}
+			else if(e.equals("") == false) {
+				sql = "SELECT * FROM employeeData1 WHERE email = '"+e+"';";
+				System.out.println(sql);
+			}
+			 else if(pn.equals("") == false) {
+				sql = "SELECT * FROM employeeData1 WHERE phoneNumber = '"+pn+"';";
+				System.out.println(sql);
+			}
+			 else if(s.equals("") == false) {
+				sql = "SELECT * FROM employeeData1 WHERE sex = '"+s+"';";
+				System.out.println(sql);
+			}
+			 else if(a.equals("") == false) {
+				sql = "SELECT * FROM employeeData1 WHERE age = '"+a+"';";
+				System.out.println(sql);
+	
+
+			}
+			 else if(sal.equals("") == false) {
+				sql = "SELECT * FROM employeeData1 WHERE salary = '"+sal+"'';";
+				System.out.println(sql);
+			}	
+	
+
+			System.out.println(sql);
+			st.executeQuery(sql);
+			ResultSet rs = st.executeQuery(sql);
+			Object [][] obj = new Object[100][8];
+			int count = 0;
+			while(rs.next()) {
+			obj[count][0] = rs.getString(1); 
+			obj[count][1] = rs.getString(2); 
+			obj[count][2] = rs.getString(3); 
+			obj[count][3] = rs.getString(4); 
+			obj[count][4] = rs.getString(5); 
+			obj[count][5] = rs.getString(6); 
+			obj[count][6] = rs.getString(7); 
+			obj[count][7] = rs.getString(8); 
+			count++;
+			}
+			con.close();
+			System.out.println("DONE");
+			return obj;
+		}	
+		
+		public void add(String id, String fn, String ln, String e, String pn, String a, String s, String sal) throws SQLException {		
+			String addr = "jdbc:mysql://-ip-/employeeManagement0?useSSL=false";
+			Connection con = DriverManager.getConnection(addr,"root","-password-");
+			Statement st = con.createStatement();
+			
+			if(id.equals("") || fn.equals("") || ln.equals("") || e.equals("") || pn.equals("") || a.equals("") || s.equals("") || sal.equals("")) {
+				JOptionPane.showMessageDialog(null,
+						 "Please fill out all 8 fields",
+						 "Add Error",
+						 JOptionPane.ERROR_MESSAGE); 
+			}
+			else {
+				String sql1 = "INSERT INTO employeeData1(EID, firstName , lastName , email , phoneNumber , age,\r\n" + 
+						"sex, salary) VALUES ('"+id+"', '"+fn+"', '"+ln+"', '"+e+"', '"+pn+"', '"+a+"', '"+s+"', '"+sal+"');" ;
+				
+				st.executeUpdate(sql1);
+				con.close();
+			}
+		}
+		public void delete(String id) throws SQLException {		
+			String addr = "jdbc:mysql://-ip-/employeeManagement0?useSSL=false";
+			Connection con = DriverManager.getConnection(addr,"root","-password-");
+			Statement st = con.createStatement();
+			
+			if(id.contentEquals("")) {
+				JOptionPane.showMessageDialog(null,
+						 "Please fill in EID field",
+						 "Delete Error",
+						 JOptionPane.ERROR_MESSAGE); 
+			}
+			else {
+				String sql = " delete from employeeData1 where EID = '"+id+"';" ;
+				System.out.println(sql);
+				st.executeUpdate(sql);
+				con.close();
+			}
+		}	
+		
+		public Object[][] table0() throws SQLException {
+			
+			String addr = "jdbc:mysql://-ip-/employeeManagement0?useSSL=false";
+			Connection con = DriverManager.getConnection(addr,"root","-password-");
+			Statement st = con.createStatement();
+			String sql = "select * from employeeData1;";
+			ResultSet rs = st.executeQuery(sql);
+			
+			Object [][] obj = new Object[100][8];
+			int count = 0;
+			while(rs.next()) {
+			obj[count][0] = rs.getString(1); 
+			obj[count][1] = rs.getString(2); 
+			obj[count][2] = rs.getString(3); 
+			obj[count][3] = rs.getString(4); 
+			obj[count][4] = rs.getString(5); 
+			obj[count][5] = rs.getString(6); 
+			obj[count][6] = rs.getString(7); 
+			obj[count][7] = rs.getString(8); 
+			count++;
+		}
+			con.close();
+			System.out.println("DONE");
+			return obj;
+		}
+	}
+
